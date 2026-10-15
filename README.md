@@ -1,4 +1,4 @@
-# DevOps Infrastructure Starter
+# Cloud and Devops Starter
 
 ## Overview
 
