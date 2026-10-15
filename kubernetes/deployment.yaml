@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: infrastructure-app
+  labels:
+    app: infrastructure-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: infrastructure-app
+  template:
+    metadata:
+      labels:
+        app: infrastructure-app
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:alpine
+          ports:
+            - name: http
+              containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 5
