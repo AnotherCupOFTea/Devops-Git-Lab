@@ -97,3 +97,69 @@ Development uses descriptive feature branches, meaningful commit messages, and p
 ## Project Status
 
 This project is under development. Configuration files and validation steps will be added and tested incrementally.
+
+## Deployment Guide
+
+### 1. Build and run with Docker
+
+Run these commands from the repository root:
+
+```bash
+docker build -t infrastructure-app -f docker/Dockerfile .
+docker run -d --name infrastructure-app -p 8080:80 infrastructure-app
+```
+
+Open http://localhost:8080 in a browser.
+
+To stop and remove the container:
+
+```bash
+docker rm -f infrastructure-app
+```
+
+### 2. Validate Terraform
+
+```bash
+cd terraform
+terraform fmt -check
+terraform init -backend=false
+terraform validate
+```
+
+This starter configuration demonstrates Terraform variables and outputs. It does not provision cloud resources.
+
+### 3. Validate Kubernetes manifests
+
+With kubectl configured for a Kubernetes cluster:
+
+```bash
+kubectl apply --dry-run=client -f kubernetes/
+```
+
+To deploy to the selected cluster:
+
+```bash
+kubectl apply -f kubernetes/
+kubectl get deployments,services
+```
+
+### 4. Run the Ansible playbook
+
+On a system with Ansible installed:
+
+```bash
+ansible-playbook --syntax-check ansible/playbook.yml
+ansible-playbook ansible/playbook.yml
+```
+
+### 5. Configure Prometheus
+
+Review `monitoring/prometheus.yml`. Configure Prometheus and the Nginx exporter so the configured service names resolve in their shared network. The exporter must be running for Nginx metrics to be collected.
+
+### 6. Continuous Integration
+
+GitHub Actions runs on pushes to `main` and feature branches, and on pull requests targeting `main`. It validates YAML syntax, checks Terraform formatting and validity, and builds the Docker image.
+
+### Security
+
+Do not commit secrets, access tokens, private keys, credentials, or Terraform state files.
