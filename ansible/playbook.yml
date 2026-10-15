@@ -1,0 +1,22 @@
+---
+- name: Validate DevOps infrastructure
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  tasks:
+    - name: Display project information
+      ansible.builtin.debug:
+        msg: "DevOps infrastructure configuration is ready"
+
+    - name: Check that the project directory exists
+      ansible.builtin.stat:
+        path: .
+      register: project_directory
+
+    - name: Confirm project directory exists
+      ansible.builtin.assert:
+        that:
+          - project_directory.stat.isdir
+        fail_msg: "Project directory was not found"
+        success_msg: "Project directory exists"
