@@ -1,4 +1,4 @@
-# DevOps Infrastructure Starter
+# DevOps Infrastructure Platform
 
 ## Overview
 
